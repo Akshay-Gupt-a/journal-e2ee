@@ -1,0 +1,18 @@
+# .gitignore (root)
+# Java/Spring
+target/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+.mvn/wrapper/MavenWrapperDownloader.java
+
+# Node/Frontend
+node_modules/
+dist/
+.build/
+.vite/
+.cache/
+
+# OS/IDE
+.DS_Store
+.idea/
+.vscode/
