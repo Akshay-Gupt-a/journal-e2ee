@@ -3,9 +3,10 @@ package com.megeMind.journalEntry.Controller;
 
 import com.megeMind.journalEntry.Entity.JournalEntry;
 import com.megeMind.journalEntry.Service.JournalEntryService;
-import com.megeMind.journalEntry.Service.UserService;
+
 import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
+
 
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +21,9 @@ public class JournalEntryController {
     public JournalEntryController(JournalEntryService journalEntryService){
         this.journalEntryService = journalEntryService;
     }
-    @GetMapping("/username/{username}")
-    public ResponseEntity<List<JournalEntry>> getAllJournalEntries(@PathVariable String username){
-        List<JournalEntry>li = journalEntryService.getAllJournalEntries(username);
+    @GetMapping()
+    public ResponseEntity<List<JournalEntry>> getAllJournalEntries(){
+        List<JournalEntry>li = journalEntryService.getAllJournalEntries();
         return ResponseEntity.ok(li);
     }
     @GetMapping("/id/{myid}")
@@ -30,14 +31,15 @@ public class JournalEntryController {
         JournalEntry journalEntry = journalEntryService.getJournalEntryById(myid);
         return ResponseEntity.ok(journalEntry);
     }
-    @PostMapping("/{username}")
-    public ResponseEntity<JournalEntry> addingJournalEntry(@PathVariable String username,@RequestBody JournalEntry journalEntry){
-        JournalEntry result =  journalEntryService.saveEntry(username,journalEntry);
+    @PostMapping()
+    public ResponseEntity<JournalEntry> addingJournalEntry(@RequestBody JournalEntry journalEntry){
+
+        JournalEntry result =  journalEntryService.saveEntry(journalEntry);
         return ResponseEntity.created(URI.create("/journal/"+result.getId())).body(result);
     }
-    @DeleteMapping("/id/{myid}/username/{username}")
-    public ResponseEntity<Void> deleteJournalEntry(@PathVariable ObjectId myid ,@PathVariable String username){
-        journalEntryService.deleteJournalEntryById(myid,username);
+    @DeleteMapping("/id/{myid}")
+    public ResponseEntity<Void> deleteJournalEntry(@PathVariable ObjectId myid ){
+        journalEntryService.deleteJournalEntryById(myid);
         return ResponseEntity.noContent().build();
     }
     @PutMapping("/{myid}")
