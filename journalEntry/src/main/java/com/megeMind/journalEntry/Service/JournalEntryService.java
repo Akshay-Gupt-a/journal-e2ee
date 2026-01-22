@@ -75,13 +75,16 @@ public class JournalEntryService {
         }
     }
     // Delete
-    public void deleteJournalEntryById(ObjectId id){
+    @Transactional
+    public boolean deleteJournalEntryById(ObjectId id){
         User userdb = getLoggedInUser();
+        boolean deleted = false;
 
         JournalEntry entry = getUserOwnedEntry(userdb, id);
-        userdb.getJournalEntries().removeIf((x)->x.getId().equals(id));
+       deleted = userdb.getJournalEntries().removeIf((x)->x.getId().equals(id));
         userService.save(userdb);
         journalEntryRepository.delete(entry);
+        return deleted;
     }
 
     // Update
