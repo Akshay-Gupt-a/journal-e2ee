@@ -34,7 +34,10 @@ public class UserController {
     @GetMapping("/{username}")
     public ResponseEntity<User> getUser(@PathVariable String username){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-         username = auth.getName();
+         String dbUsername = auth.getName();
+         if(!dbUsername.equals(username)){
+             return  ResponseEntity.badRequest().build();
+         }
         User dbUser = userService.getUser(username).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"User Not Found"));
         return ResponseEntity.ok(dbUser);
     }

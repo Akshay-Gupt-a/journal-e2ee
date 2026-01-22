@@ -20,9 +20,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // ✅ important for Postman POST/PUT/DELETE
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/user/register").permitAll()
+                        .requestMatchers("/user/user-admin/**").hasRole("ADMIN")
                         .requestMatchers("/journal/**").authenticated()
                         .requestMatchers("/user/**").authenticated()
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults()); // ✅ enable Basic Auth
 
