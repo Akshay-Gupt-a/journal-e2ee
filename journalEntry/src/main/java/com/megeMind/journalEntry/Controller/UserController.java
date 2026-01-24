@@ -2,6 +2,8 @@ package com.megeMind.journalEntry.Controller;
 
 import com.megeMind.journalEntry.Entity.User;
 import com.megeMind.journalEntry.Service.UserService;
+import com.megeMind.journalEntry.Service.WeatherService;
+import com.megeMind.journalEntry.response.WeatherResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,20 +19,19 @@ import java.util.Optional;
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
-    public UserController(UserService userService) {
+    private final WeatherService weatherService;
+    public UserController(UserService userService, WeatherService weatherService) {
         this.userService = userService;
+        this.weatherService = weatherService;
     }
+
     @PostMapping("/register")
     public ResponseEntity<User> addUser(@RequestBody User user){
         User saveUser = userService.saveUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(saveUser);
     }
 
-//    @GetMapping
-//    public ResponseEntity<List<User>> getAllUser(){
-//        List<User> users = userService.getAllUser();
-//        return ResponseEntity.ok(users);
-//    }
+
     @GetMapping("/{username}")
     public ResponseEntity<User> getUser(@PathVariable String username){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -41,7 +42,22 @@ public class UserController {
         User dbUser = userService.getUser(username).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"User Not Found"));
         return ResponseEntity.ok(dbUser);
     }
+//For using as api call
+    @GetMapping("/me/{city}")
+    public ResponseEntity<?>provideUser(@PathVariable String city){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String user = auth.getName();
+        WeatherResponse response = weatherService.getWeather(city);
+        String greeting = "";
+        if(response!=null){
+            greeting = "Weather Feels like"+response.getCurrent().getFeelslike();
+        }
+        else{
+            return   ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok( "Hi "+user +" "+greeting );
 
+    }
     @PutMapping("/me")
     public ResponseEntity<User> updateUser( @RequestBody User user){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -55,4 +71,5 @@ public class UserController {
         userService.deleteUser(auth.getName());
         return ResponseEntity.noContent().build();
     }
+
 }
