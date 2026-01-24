@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: journalEntry
+
+
+  data:
+    mongodb:
+      auto-index-creation: true
+  mongodb:
+    uri: ${MONGO_URI}
+
+  profiles:
+    active: dev
+
+weather:
+  api:
+    key: ${WEATHER_API}
