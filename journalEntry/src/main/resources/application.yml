@@ -9,8 +9,6 @@ spring:
   mongodb:
     uri: ${MONGO_URI}
 
-  profiles:
-    active: dev
 
 weather:
   api:
