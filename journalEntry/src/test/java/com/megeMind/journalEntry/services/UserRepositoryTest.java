@@ -1,5 +1,6 @@
 package com.megeMind.journalEntry.services;
 
+import com.megeMind.journalEntry.Repository.JournalEntryRepository;
 import com.megeMind.journalEntry.Repository.UserRepository;
 
 import com.megeMind.journalEntry.Service.WeatherService;
@@ -24,6 +25,9 @@ public class UserRepositoryTest {
     @MockitoBean // This creates a fake bean and adds it to the context
     private WeatherService weatherService;
     // Remove the constructor entirely
+
+    @MockitoBean
+    private JournalEntryRepository journalEntryRepository;
 
     @Test
     @Disabled

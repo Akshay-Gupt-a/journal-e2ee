@@ -22,8 +22,8 @@ public class UserAdminController {
         this.userRepository = userRepository;
         this.userService = userService;
         this.appCache = appCache;
-    }
 
+    }
     @GetMapping
     public ResponseEntity<List<User>> getAllUser(){
         return ResponseEntity.ok().body(userRepository.findAll());
